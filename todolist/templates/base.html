@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="fa fa-tasks mr-2"></i>
+                <span class="brand-text">TodoList</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbar">
+                <div class="navbar-nav mr-auto">
+                    {% if user.is_authenticated %}
+                        <a class="nav-item nav-link" id="home" href="/home">
+                            <i class="fa fa-home mr-1"></i>
+                            <span>Trang chủ</span>
+                        </a>
+                        {% if user.is_admin %}
+                        <a class="nav-item nav-link" id="admin" href="/admin">
+                            <i class="fa fa-cog mr-1"></i>
+                            <span>Quản trị</span>
+                        </a>
+                        {% endif %}
+                        <a class="nav-item nav-link" id="profile" href="/profile">
+                            <i class="fa fa-user mr-1"></i>
+                            <span>Hồ sơ</span>
+                        </a>
+                        <a class="nav-item nav-link" id="logout" href="/logout">
+                            <i class="fa fa-sign-out mr-1"></i>
+                            <span>Đăng xuất</span>
+                        </a>
+                    {% else %}
+                        <a class="nav-item nav-link" id="login" href="/login">
+                            <i class="fa fa-sign-in mr-1"></i>
+                            <span>Đăng nhập</span>
+                        </a>
+                        <a class="nav-item nav-link" id="signUp" href="/signup">
+                            <i class="fa fa-user-plus mr-1"></i>
+                            <span>Đăng ký</span>
+                        </a>
+                    {% endif %}
+                </div>
+                
+                {% if user.is_authenticated %}
+                <div class="navbar-user-info">
+                    <div class="user-avatar">
+                        <i class="fa fa-user-circle"></i>
+                    </div>
+                    <span class="navbar-text text-light small ml-2">
+                        Xin chào, <strong>{{ user.user_name }}</strong>
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="container mt-3">
+            {% for cat, mess in messages %}
+                {% if cat == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ mess }}
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% else %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ mess }}
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+    <div class = "container py-5" style="font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';">
+        {% block content %} 
+        {% endblock %}
+    </div>
+    <div class="container py-2">
+        <div class="footer text-center py-2">
+            <span class="small">Todolist • Làm việc thông minh hơn</span>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>
